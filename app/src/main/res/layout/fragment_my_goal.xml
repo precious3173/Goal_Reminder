@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DDDBE1DB"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MyGoalFragment">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/relative1"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Goals"
+            android:textSize= "35sp"
+            android:textStyle ="bold"
+            android:layout_margin="15dp"
+            android:id="@+id/myGoals"
+            android:textColor="@color/black"
+            android:fontFamily="sans-serif-black"
+            android:layout_alignParentStart="true"
+            />
+
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/notifications_off_"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/notification"
+            android:layout_margin="15dp"
+
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/relative1"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="35dp"
+        android:layout_marginStart="10dp"
+        android:id="@+id/Linear1"
+        android:orientation="horizontal"
+        >
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Add Goal"
+            android:fontFamily="sans-serif-black"
+            android:textColor="@color/white"
+            android:padding="15dp"
+            android:id="@+id/addGoal"
+            android:backgroundTint="#32CAA7"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Dear Diary"
+            android:fontFamily="sans-serif-black"
+            android:textColor="@color/white"
+            android:layout_gravity="end"
+            android:padding="15dp"
+            android:backgroundTint="#32CAA7"
+            android:layout_marginStart="40dp"
+            android:textStyle="bold"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/Linear1"
+        android:id="@+id/recyclerview"
+        android:orientation="horizontal"
+        app:spanCount="2"
+        android:layout_marginTop="50dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:listitem="@layout/recyclerview_layout"
+        />
+
+
+</RelativeLayout>
