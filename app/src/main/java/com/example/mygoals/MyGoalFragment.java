@@ -1,5 +1,9 @@
 package com.example.mygoals;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -34,7 +38,8 @@ public class MyGoalFragment extends Fragment {
     FirebaseUser user;
     ImageView notificationBell;
     Bundle bundle;
-    String id;
+    NotificationManager notificationManager;
+    String id, notificationTime,goalTitle;
     public MyGoalFragment() {
         // Required empty public constructor
     }
@@ -55,6 +60,7 @@ public class MyGoalFragment extends Fragment {
 
 
          addGoal = view.findViewById(R.id.addGoal);
+         notificationBell = view.findViewById(R.id.notification);
 
          addGoal.setOnClickListener(new View.OnClickListener() {
              @Override
@@ -66,12 +72,13 @@ public class MyGoalFragment extends Fragment {
         databaseReference2= FirebaseDatabase.getInstance().getReference("Notification");
         firebaseAuth = FirebaseAuth.getInstance();
         user= firebaseAuth.getCurrentUser();
+       notificationTime = "" + System.currentTimeMillis();
 
 
         bundle = this.getArguments();
         if (bundle != null){
 
-            id = bundle.getString("id");
+           goalTitle  = bundle.getString("goalTitle");
         }
 
          notificationBell.setOnClickListener(new View.OnClickListener() {
@@ -96,10 +103,16 @@ public class MyGoalFragment extends Fragment {
 
     private void notification() {
 
+        CharSequence app = "My Goal Reminder";
+        String goalTitlet = goalTitle;
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel notificationChannel = new NotificationChannel("My Goal Reminder",app,importance);
+
+        notificationChannel.setDescription(goalTitlet);
 
 
+        }
 
-    }
 
     private void goalList() {
 

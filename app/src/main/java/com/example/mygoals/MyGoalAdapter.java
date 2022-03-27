@@ -47,9 +47,10 @@ GoalDescriptionFragment goalDescriptionFragment;
        holder.itemView.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-               goalDescriptionFragment = new GoalDescriptionFragment();
+
                Bundle bundle = new Bundle();
-               bundle.putString("id", id);
+               bundle.putString("goalDescription", goalDescription);
+               goalDescriptionFragment = new GoalDescriptionFragment();
                goalDescriptionFragment.setArguments(bundle);
                ((MainActivity)context).setViewPager(2);
            }

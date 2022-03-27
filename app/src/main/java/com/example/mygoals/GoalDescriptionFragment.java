@@ -48,40 +48,18 @@ FirebaseUser user;
         bundle = this.getArguments();
         if (bundle != null){
 
-            id = bundle.getString("id");
+            goalDescription = bundle.getString("goalDescription");
         }
 
         goalDescriptionText = view.findViewById(R.id.text);
-        addDescriptionText(id);
 
 
-
+        goalDescriptionText.setText(goalDescription);
 
         return view;
 
 
     }
 
-    private void addDescriptionText(String id) {
-        databaseReference = FirebaseDatabase.getInstance().getReference("Goals");
-
-        databaseReference.orderByChild("id").equalTo(id).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                for(DataSnapshot ds: snapshot.getChildren()) {
-                    goalDescription = "" + ds.child("goalDescription").getValue(String.class);
-
-                    goalDescriptionText.setText(goalDescription);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-    }
 
 }

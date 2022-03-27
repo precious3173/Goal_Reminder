@@ -1,6 +1,14 @@
 package com.example.mygoals;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.icu.util.Calendar;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,7 +33,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -34,6 +42,7 @@ import java.util.Map;
 public class AddGoalsFragment extends Fragment {
 
    DatePicker myGoalDate;
+   TimePicker myGoalTime;
    Button setGoal, cancel;
    EditText goalTitle, goalDescription;
    DatabaseReference databaseReference;
@@ -41,6 +50,8 @@ public class AddGoalsFragment extends Fragment {
    FirebaseAuth firebaseAuth;
    FirebaseUser user;
     String uid;
+    Bundle bundle;
+    AlarmReceiver alarmReceiver;
     String messageTime;
    ProgressDialog progressDialog;
 
@@ -71,15 +82,13 @@ public class AddGoalsFragment extends Fragment {
         }
          messageTime = "" + System.currentTimeMillis();
 
-
             reference = databaseReference.child(messageTime);
 
 
-
-
-
-
         myGoalDate = view.findViewById(R.id.GoalDate);
+        myGoalTime = view.findViewById(R.id.GoalTime);
+
+        myGoalTime.setIs24HourView(true);
 
       cancel= view.findViewById(R.id.cancel);
 
@@ -96,6 +105,7 @@ public class AddGoalsFragment extends Fragment {
 
       setGoal = view.findViewById(R.id.setGoal);
 
+      notificationChannel();
 
       setGoal.setOnClickListener(new View.OnClickListener() {
           @Override
@@ -113,7 +123,7 @@ public class AddGoalsFragment extends Fragment {
 
 
 
-              setDatabase(myGoalDate, goalTitle, goalDescription);
+              setDatabase(myGoalDate, myGoalTime, goalTitle, goalDescription);
           }
       });
 
@@ -121,12 +131,31 @@ public class AddGoalsFragment extends Fragment {
         return view;
     }
 
-    private void setDatabase(DatePicker myGoalDate, EditText goalTitle, EditText goalDescription) {
+    private void notificationChannel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "My Goal Reminder";
+            String description = goalTitle.toString();
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+            NotificationChannel notificationChannel = new NotificationChannel("My Goal Reminder", name, importance);
+
+            notificationChannel.setDescription(description);
+
+            NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(notificationChannel);
+
+        }
+
+    }
+
+    private void setDatabase(DatePicker myGoalDate, TimePicker myGoalTime, EditText goalTitle, EditText goalDescription) {
 
 
         int day = myGoalDate.getDayOfMonth();
         int month = myGoalDate.getMonth();
         int year = myGoalDate.getYear();
+        int hour = myGoalTime.getHour();
+        int minute = myGoalTime.getMinute();
 
         String date = (month + 1) + "/" + day + "/" + year;
         String goalT = goalTitle.getText().toString();
@@ -146,8 +175,31 @@ public class AddGoalsFragment extends Fragment {
                public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()) {
                     progressDialog.dismiss();
-                    Toast.makeText(getContext(), "Goal is updated", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(getContext(), AlarmReceiver.class);
+                    intent.putExtra("contentTitle", goalT);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 1, intent, 0);
+
+                    AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    calendar.set(Calendar.HOUR_OF_DAY, hour);
+                    calendar.set(Calendar.MINUTE, minute);
+                    calendar.set(Calendar.SECOND, 0);
+                    calendar.set(Calendar.DAY_OF_MONTH, day);
+                    calendar.set(Calendar.MONTH, month);
+                    calendar.set(Calendar.YEAR, year);
+
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+                    Toast.makeText(getContext(), "Goal updated", Toast.LENGTH_SHORT).show();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("goalTitle", "" + goalTitle);
+                    MyGoalFragment myGoalFragment = new MyGoalFragment();
+                    myGoalFragment.setArguments(bundle);
                     ((MainActivity)getActivity()).setViewPager(0);
+
 
                 }
                }
