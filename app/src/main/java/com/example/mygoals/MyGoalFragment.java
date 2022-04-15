@@ -1,5 +1,7 @@
 package com.example.mygoals;
 
+
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.graphics.Color;
@@ -8,6 +10,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -16,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,17 +35,17 @@ import java.util.ArrayList;
 
 public class MyGoalFragment extends Fragment {
 
-    Button addGoal;
+    Button addGoal, dearDiary;
     MyGoalAdapter myGoalAdapter;
     ArrayList<MyGoalArrayList> myGoalArrayListArrayList = new ArrayList<>();
     RecyclerView recyclerView;
     DatabaseReference databaseReference, databaseReference2;
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
-    ImageView notificationBell;
+   FloatingActionButton notificationBell;
     Bundle bundle;
-    NotificationManager notificationManager;
-    String id, notificationTime,goalTitle;
+    NavController navController;
+    String notificationTime,goalTitle;
     public MyGoalFragment() {
         // Required empty public constructor
     }
@@ -50,6 +56,7 @@ public class MyGoalFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    navController = NavHostFragment.findNavController(this);
     }
 
     @Override
@@ -61,11 +68,22 @@ public class MyGoalFragment extends Fragment {
 
          addGoal = view.findViewById(R.id.addGoal);
          notificationBell = view.findViewById(R.id.notification);
+         dearDiary = view.findViewById(R.id.dearDiary);
+
 
          addGoal.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
-                 ((MainActivity)getActivity()).setViewPager(1);
+                navController.navigate(R.id.action_myGoalFragment_to_addGoalsFragment);
+
+             }
+         });
+
+         dearDiary.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+
+                 navController.navigate(R.id.action_myGoalFragment_to_dearDiaryFragment);
              }
          });
 

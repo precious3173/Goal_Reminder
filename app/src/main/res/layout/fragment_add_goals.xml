@@ -6,7 +6,7 @@
     tools:context=".AddGoalsFragment"
     android:gravity="center_horizontal"
     android:padding="20dp"
-    android:background="#DDDBE1DB"
+    android:background="#ffff"
     >
 
 <ScrollView
@@ -51,7 +51,7 @@
             android:id="@+id/GoalDate"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
-            android:background="#32CAA7"
+            android:background="#E18A0A"
             android:scaleX="0.9"
             android:scaleY="0.9"
 
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/GoalTime"
             android:timePickerMode="spinner"
-            android:background="#32CAA7"
+            android:background="#E18A0A"
             android:scaleY="0.9"
             android:scaleX="0.9"/>
     </LinearLayout>
@@ -83,8 +83,9 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:text="SET GOAL"
-            android:backgroundTint="#32CAA7"
-            android:padding="15dp"
+            android:backgroundTint="#E18A0A"
+            android:padding="20dp"
+            android:textColor="#ffff"
             android:id="@+id/setGoal"
             />
 
@@ -94,8 +95,9 @@
             android:layout_marginRight="20dp"
             android:text="CANCEL"
             android:id="@+id/cancel"
-        android:backgroundTint="#32CAA7"
-            android:padding="15dp"
+        android:backgroundTint="#E18A0A"
+            android:padding="20dp"
+            android:textColor="#ffff"
             />
     </LinearLayout>
 </LinearLayout>

@@ -15,6 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,8 +53,7 @@ public class AddGoalsFragment extends Fragment {
    FirebaseAuth firebaseAuth;
    FirebaseUser user;
     String uid;
-    Bundle bundle;
-    AlarmReceiver alarmReceiver;
+    NavController navController;
     String messageTime;
    ProgressDialog progressDialog;
 
@@ -64,6 +66,8 @@ public class AddGoalsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        navController = NavHostFragment.findNavController(this);
 
     }
 
@@ -92,10 +96,12 @@ public class AddGoalsFragment extends Fragment {
 
       cancel= view.findViewById(R.id.cancel);
 
+
       cancel.setOnClickListener(new View.OnClickListener() {
           @Override
-          public void onClick(View view) {
-              ((MainActivity)getActivity()).setViewPager(0);
+          public void onClick(View view){
+
+          navController.navigate(R.id.action_addGoalsFragment_to_myGoalFragment);
           }
       });
 
@@ -123,7 +129,7 @@ public class AddGoalsFragment extends Fragment {
 
 
 
-              setDatabase(myGoalDate, myGoalTime, goalTitle, goalDescription);
+              setDatabase(myGoalDate, myGoalTime, goalTitle, goalDescription, navController);
           }
       });
 
@@ -148,7 +154,7 @@ public class AddGoalsFragment extends Fragment {
 
     }
 
-    private void setDatabase(DatePicker myGoalDate, TimePicker myGoalTime, EditText goalTitle, EditText goalDescription) {
+    private void setDatabase(DatePicker myGoalDate, TimePicker myGoalTime, EditText goalTitle, EditText goalDescription, NavController navController) {
 
 
         int day = myGoalDate.getDayOfMonth();
@@ -198,7 +204,7 @@ public class AddGoalsFragment extends Fragment {
                     bundle.putString("goalTitle", "" + goalTitle);
                     MyGoalFragment myGoalFragment = new MyGoalFragment();
                     myGoalFragment.setArguments(bundle);
-                    ((MainActivity)getActivity()).setViewPager(0);
+                    navController.navigate(R.id.action_addGoalsFragment_to_myGoalFragment);
 
 
                 }

@@ -1,5 +1,7 @@
 package com.example.mygoals;
 
+import android.view.MotionEvent;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -14,8 +16,15 @@ public class FragmentPageAdapter extends FragmentStatePagerAdapter {
     private final List<String>mFragmentTitle = new ArrayList<>();
     public FragmentPageAdapter(@NonNull FragmentManager fm) {
         super(fm);
+
+        setMyScroller();
     }
- public void addFragment (Fragment fragment, String title) {
+
+
+    private void setMyScroller() {
+    }
+
+    public void addFragment (Fragment fragment, String title) {
         mFragmentList.add(fragment);
         mFragmentTitle.add(title);
  }
@@ -29,4 +38,7 @@ public class FragmentPageAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return mFragmentList.size();
     }
+
+
 }
+

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/myGoalFragment">
+
+    <fragment
+        android:id="@+id/myGoalFragment"
+        android:name="com.example.mygoals.MyGoalFragment"
+        android:label="fragment_my_goal"
+        tools:layout="@layout/fragment_my_goal" >
+        <action
+            android:id="@+id/action_myGoalFragment_to_addGoalsFragment"
+            app:destination="@id/addGoalsFragment" />
+        <action
+            android:id="@+id/action_myGoalFragment_to_dearDiaryFragment"
+            app:destination="@id/dearDiaryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addGoalsFragment"
+        android:name="com.example.mygoals.AddGoalsFragment"
+        android:label="fragment_add_goals"
+        tools:layout="@layout/fragment_add_goals" >
+        <action
+            android:id="@+id/action_addGoalsFragment_to_myGoalFragment"
+            app:destination="@id/myGoalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dearDiaryFragment"
+        android:name="com.example.mygoals.DearDiaryFragment"
+        android:label="fragment_dear_diary"
+        tools:layout="@layout/fragment_dear_diary" >
+        <action
+            android:id="@+id/action_dearDiaryFragment_to_myGoalFragment"
+            app:destination="@id/myGoalFragment" />
+        <action
+            android:id="@+id/action_dearDiaryFragment_to_addDiaryFragment"
+            app:destination="@id/addDiaryFragment" />
+        <action
+            android:id="@+id/action_dearDiaryFragment_to_editDiaryFragment"
+            app:destination="@id/editDiaryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addDiaryFragment"
+        android:name="com.example.mygoals.AddDiaryFragment"
+        android:label="fragment_add_diary"
+        tools:layout="@layout/fragment_add_diary" >
+        <action
+            android:id="@+id/action_addDiaryFragment_to_dearDiaryFragment"
+            app:destination="@id/dearDiaryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editDiaryFragment"
+        android:name="com.example.mygoals.EditDiaryFragment"
+        android:label="fragment_edit_diary"
+        tools:layout="@layout/fragment_edit_diary" >
+        <action
+            android:id="@+id/action_editDiaryFragment_to_dearDiaryFragment"
+            app:destination="@id/dearDiaryFragment" />
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <argument
+            android:name="diaryText"
+            app:argType="string" />
+    </fragment>
+</navigation>

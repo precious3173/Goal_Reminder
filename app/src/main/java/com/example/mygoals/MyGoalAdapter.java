@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -52,7 +55,7 @@ GoalDescriptionFragment goalDescriptionFragment;
                bundle.putString("goalDescription", goalDescription);
                goalDescriptionFragment = new GoalDescriptionFragment();
                goalDescriptionFragment.setArguments(bundle);
-               ((MainActivity)context).setViewPager(2);
+               Navigation.createNavigateOnClickListener(R.id.action_dearDiaryFragment_to_editDiaryFragment);
            }
        });
 
