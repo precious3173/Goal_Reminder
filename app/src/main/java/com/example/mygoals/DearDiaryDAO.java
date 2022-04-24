@@ -1,5 +1,7 @@
 package com.example.mygoals;
 
+import static androidx.room.OnConflictStrategy.REPLACE;
+
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -13,14 +15,15 @@ import java.util.List;
 public interface DearDiaryDAO {
 
 
+    @Insert (onConflict = REPLACE)
+    void insertDearDiary (DearDiaryArray dearDiaryArray);
+
     @Query("SELECT * FROM dearyDiary")
     List<DearDiaryArray> getAll();
 
-    @Insert
-    void insertDearDiary (DearDiaryArray dearDiaryArray);
+    @Query("UPDATE dearyDiary SET diary_text = :diary_text WHERE id = :id")
+    void  updateDearDiary (int id, String diary_text);
 
-    @Update
-    void  updateDearDiary (DearDiaryArray dearDiaryArray);
 
     @Delete
     void deleteDearDiary (DearDiaryArray dearDiaryArray);

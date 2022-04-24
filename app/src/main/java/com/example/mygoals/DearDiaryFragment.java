@@ -15,12 +15,13 @@ import androidx.room.Room;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-public class DearDiaryFragment extends Fragment implements DearDiaryAdapter.onItemClick {
+public  class DearDiaryFragment extends Fragment implements DearDiaryAdapter.onItemClick, DearDiaryAdapter.onItemDelete {
 
     Toolbar toolbar;
     FloatingActionButton floatingActionButton;
@@ -29,6 +30,9 @@ public class DearDiaryFragment extends Fragment implements DearDiaryAdapter.onIt
     NavController navController;
     DearDiaryDatabase dearDiaryDatabase;
     List<DearDiaryArray> dearDiaryArrays;
+    Bundle b;
+    int colour;
+
     public DearDiaryFragment() {
         // Required empty public constructor
     }
@@ -39,10 +43,16 @@ public class DearDiaryFragment extends Fragment implements DearDiaryAdapter.onIt
         super.onCreate(savedInstanceState);
 
         dearDiaryDatabase = Room.databaseBuilder(getContext(),
-                DearDiaryDatabase.class,"DearDiary").allowMainThreadQueries().build();
-
+                DearDiaryDatabase.class, "DearDiary").allowMainThreadQueries().build();
         navController = NavHostFragment.findNavController(this);
-        dearDiaryArrays =dearDiaryDatabase.dearDiaryDAO().getAll();
+        dearDiaryArrays = dearDiaryDatabase.dearDiaryDAO().getAll();
+
+        b = this.getArguments();
+
+        if(b != null) {
+            colour = b.getInt("colour");
+        }
+
     }
 
 
@@ -55,37 +65,41 @@ public class DearDiaryFragment extends Fragment implements DearDiaryAdapter.onIt
 
         toolbar = view.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-         toolbar.setTitle("Dear Diary");
+        toolbar.setTitle("Dear Diary");
 
-         floatingActionButton = view.findViewById(R.id.floatAction);
+        floatingActionButton = view.findViewById(R.id.floatAction);
 
-         floatingActionButton.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 navController.navigate(R.id.action_dearDiaryFragment_to_addDiaryFragment);
-             }
-         });
-
-
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.action_dearDiaryFragment_to_addDiaryFragment);
+            }
+        });
 
 
-         recyclerView = view.findViewById(R.id.recyclerview);
-         dearDiaryAdapter = new DearDiaryAdapter(dearDiaryArrays, getContext(),this);
-         recyclerView.setAdapter(dearDiaryAdapter);
-
-
- return view;
+        recyclerView = view.findViewById(R.id.recyclerview);
+        dearDiaryAdapter = new DearDiaryAdapter(dearDiaryArrays, getContext(), this, this);
+        recyclerView.setAdapter(dearDiaryAdapter);
+        recyclerView.setHasFixedSize(true);
+        return view;
     }
 
     @Override
-    public void onItem (DearDiaryArray dearDiaryArray) {
+    public void onItem(DearDiaryArray dearDiaryArray) {
 
 
         EditDiaryFragment editDiaryFragment = new EditDiaryFragment();
         Bundle bundle = new Bundle();
         bundle.putString("diaryText", dearDiaryArray.getDiaryText());
         bundle.putInt("id", dearDiaryArray.getId());
+        bundle.putInt("colour", colour);
         editDiaryFragment.setArguments(bundle);
-        navController.navigate(R.id.action_dearDiaryFragment_to_editDiaryFragment, bundle );
+        navController.navigate(R.id.action_dearDiaryFragment_to_editDiaryFragment, bundle);
+    }
+
+
+    @Override
+    public void onDelete(DearDiaryArray dearDiaryArray) {
+        Toast.makeText( getContext(),"Diary has been deleted ", Toast.LENGTH_SHORT).show();
     }
 }

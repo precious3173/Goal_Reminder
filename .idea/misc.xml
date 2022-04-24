@@ -11,6 +11,7 @@
         <entry key="..\:/Users/SONY/AndroidStudioProjects/MyGoals/app/src/main/res/drawable/view_background.xml" value="0.164" />
         <entry key="..\:/Users/SONY/AndroidStudioProjects/MyGoals/app/src/main/res/drawable/wish.xml" value="0.164" />
         <entry key="..\:/Users/SONY/AndroidStudioProjects/MyGoals/app/src/main/res/layout/activity_main.xml" value="0.16032608695652173" />
+        <entry key="..\:/Users/SONY/AndroidStudioProjects/MyGoals/app/src/main/res/layout/add_diary_image.xml" value="0.1" />
         <entry key="..\:/Users/SONY/AndroidStudioProjects/MyGoals/app/src/main/res/layout/dear_diary_recyclerview.xml" value="0.1875" />
         <entry key="..\:/Users/SONY/AndroidStudioProjects/MyGoals/app/src/main/res/layout/fragment_add_diary.xml" value="0.13903985507246377" />
         <entry key="..\:/Users/SONY/AndroidStudioProjects/MyGoals/app/src/main/res/layout/fragment_add_goals.xml" value="0.2" />
@@ -19,6 +20,7 @@
         <entry key="..\:/Users/SONY/AndroidStudioProjects/MyGoals/app/src/main/res/layout/fragment_goal_description.xml" value="0.11" />
         <entry key="..\:/Users/SONY/AndroidStudioProjects/MyGoals/app/src/main/res/layout/fragment_my_goal.xml" value="0.22" />
         <entry key="..\:/Users/SONY/AndroidStudioProjects/MyGoals/app/src/main/res/layout/recyclerview_layout.xml" value="0.16032608695652173" />
+        <entry key="..\:/Users/SONY/AndroidStudioProjects/MyGoals/app/src/main/res/menu/delete_menu.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>
