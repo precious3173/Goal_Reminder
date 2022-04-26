@@ -2,13 +2,18 @@ package com.example.mygoals;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,14 +27,17 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.room.Room;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -37,7 +45,7 @@ import java.util.Random;
 
 public class AddDiaryFragment extends Fragment {
 
-ImageView addDiary, background, addImage;
+ImageView addDiary, background, addImage, photo;
 EditText editText;
 String diaryDate, diaryText;
 int colour, id;
@@ -46,10 +54,16 @@ private static final int CAMERA_CODE = 1000;
 private static final int LIBRARY_CODE = 1001;
 private String[] cameraPermissions;
 private String[] libraryPermissions;
-LinearLayout linearLayout;
+RelativeLayout relativeLayout;
 NavController navController;
-
+Intent a;
+Uri uri;
+    ActivityResultLauncher<String> activityResultLauncher;
+    ActivityResultLauncher<Intent>activityResult;
+    ActivityResultLauncher<String> activtLauncher;
 List<Integer>backgroundColour = new ArrayList<>();
+
+
     public AddDiaryFragment() {
         // Required empty public constructor
     }
@@ -59,7 +73,22 @@ List<Integer>backgroundColour = new ArrayList<>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         navController = NavHostFragment.findNavController(this);
+
+       activityResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+            @Override
+            public void onActivityResult(Boolean result) {
+
+                if(result) {
+                    Toast.makeText(getContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Permission not granted", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
     }
 
@@ -72,8 +101,11 @@ List<Integer>backgroundColour = new ArrayList<>();
         addDiary = view.findViewById(R.id.addDiary);
         editText = view.findViewById(R.id.text);
         background = view.findViewById(R.id.background);
-        linearLayout = view.findViewById(R.id.linear);
+        relativeLayout = view.findViewById(R.id.linear);
         addImage = view.findViewById(R.id.addImage);
+
+        photo = view.findViewById(R.id.Image);
+
 
 
         addImage.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +117,18 @@ List<Integer>backgroundColour = new ArrayList<>();
         });
 
 
+        activityResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK ){
+
+                    a = result.getData();
+                    assert a != null;
+                    uri = a.getData();
+                    photo.setImageURI(uri);
+                }
+            }
+        });
          //add background colour
 
         background.setOnClickListener(new View.OnClickListener() {
@@ -96,14 +140,10 @@ List<Integer>backgroundColour = new ArrayList<>();
 
               colour =  Color.argb(255, random.nextInt(265),random.nextInt(265),random.nextInt(265));
 
-              editText.setBackgroundColor(colour);
+              relativeLayout.setBackgroundColor(colour);
 
                 }
         });
-
-
-        //add image to edit text
-
 
 
 
@@ -144,16 +184,15 @@ List<Integer>backgroundColour = new ArrayList<>();
         public void onClick(DialogInterface dialogInterface, int i) {
 
             if(Items[i].equals("Camera")){
-                if((ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
-                    ActivityCompat.requestPermissions(getActivity(), cameraPermissions, CAMERA_CODE );
+                if((getActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
+                    activityResultLauncher.launch(Manifest.permission.CAMERA);
                 }     else {
                     openCamera();
                 }
         } else if (Items[i].equals("Library")) {
-                if((ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)){
-                 ActivityCompat.requestPermissions(getActivity(), libraryPermissions, LIBRARY_CODE );
+                if((getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+                    activityResultLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
                 } else {
-                    
                     openLibrary();
                 }
             }
@@ -165,35 +204,24 @@ alertDialog.show();
     }
 
     private void openLibrary() {
+         a = new Intent(Intent.ACTION_PICK);
+        a.setType("image/*");
+        activityResult.launch(a);
+
     }
 
     private void openCamera() {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.Images.Media.TITLE, "Profile Image");
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, 1);
+        uri= intent.getData();
+        intent.putExtra(MediaStore.ACTION_IMAGE_CAPTURE, uri);
+        activityResult.launch(intent);
+
+
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-   if(requestCode == 1 ) {
-       
-       if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-           Toast.makeText(getContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
-          Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-          startActivityForResult(intent, 1);
-       }
-   }
-   
-    }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-
-
-    if(requestCode == 1 && requestCode == Activity.RESULT_OK){
-        Bitmap photo = (Bitmap) data.getExtras().get("data");
-
-    }
-    }
 }
