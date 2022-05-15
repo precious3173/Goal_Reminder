@@ -1,4 +1,4 @@
-package com.example.mygoals;
+package com.example.mygoals.adapter;
 
 import android.view.MotionEvent;
 

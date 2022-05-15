@@ -1,4 +1,4 @@
-package com.example.mygoals;
+package com.example.mygoals.database;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -6,9 +6,9 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
-import java.util.ArrayList;
+import com.example.mygoals.model.DearDiaryArray;
+
 import java.util.List;
 
 @Dao

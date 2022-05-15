@@ -1,5 +1,6 @@
 package com.example.mygoals;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.mygoals.database.DearDiaryDatabase;
+import com.example.mygoals.model.DearDiaryArray;
+import com.example.mygoals.model.DiaryConverter;
+
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.util.List;
 
 
@@ -24,10 +31,12 @@ public class EditDiaryFragment extends Fragment {
 
     EditText editDiary;
     String diaryText, diaryDate, diaryTextUpdate;
-    int id, colour;
+    int id, colour, pix;
     NavController navController;
     Bundle bundle;
-    ImageView update;
+    byte [] image;
+    Uri uri;
+    ImageView update, picture;
     DearDiaryDatabase dearDiaryDatabase;
     List<DearDiaryArray> dearDiaryArrays;
 
@@ -46,6 +55,9 @@ public class EditDiaryFragment extends Fragment {
         diaryText = bundle.getString("diaryText");
         colour = bundle.getInt("colour");
         id = bundle.getInt("id");
+        image = bundle.getByteArray("image");
+
+
         }
 
     }
@@ -59,10 +71,12 @@ public class EditDiaryFragment extends Fragment {
 
         update = view.findViewById(R.id.update);
         editDiary = view.findViewById(R.id.editDiary);
+        picture = view.findViewById(R.id.Image);
+
+
+        picture.setImageBitmap(DiaryConverter.byteArrayToBitmap(image));
         diaryTextUpdate = editDiary.getText().toString();
-
         editDiary.setBackgroundColor(colour);
-
         diaryDate  = "" + System.currentTimeMillis();
 
 

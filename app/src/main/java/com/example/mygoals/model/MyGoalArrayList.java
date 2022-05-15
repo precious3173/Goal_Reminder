@@ -1,4 +1,4 @@
-package com.example.mygoals;
+package com.example.mygoals.model;
 
 public class MyGoalArrayList {
 

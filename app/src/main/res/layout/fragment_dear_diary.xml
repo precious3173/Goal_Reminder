@@ -18,11 +18,6 @@
             android:background="#E18A0A"
             android:id="@+id/toolbar"/>
 
-        <androidx.appcompat.widget.SearchView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"

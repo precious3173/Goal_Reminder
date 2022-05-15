@@ -1,4 +1,4 @@
-package com.example.mygoals;
+package com.example.mygoals.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -21,9 +21,14 @@ public class DearDiaryArray {
     @ColumnInfo (name = "diary_date")
     private String diaryDate;
 
-    public DearDiaryArray( @NonNull String diaryText, @NonNull String diaryDate) {
+    @NonNull
+    @ColumnInfo (name = "diary_image",typeAffinity = ColumnInfo.BLOB)
+    private byte [] image;
+
+    public DearDiaryArray( @NonNull String diaryText, @NonNull String diaryDate, byte [] image) {
         this.diaryText = diaryText;
         this.diaryDate = diaryDate;
+        this.image = image;
     }
 
 
@@ -51,5 +56,14 @@ public class DearDiaryArray {
 
     public void setDiaryDate(@NonNull String diaryDate) {
         this.diaryDate = diaryDate;
+    }
+
+    @NonNull
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(@NonNull byte[] image) {
+        this.image = image;
     }
 }

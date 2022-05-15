@@ -1,7 +1,6 @@
-package com.example.mygoals;
+package com.example.mygoals.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +8,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.mygoals.GoalDescriptionFragment;
+import com.example.mygoals.model.MyGoalArrayList;
+import com.example.mygoals.R;
 
 import java.util.ArrayList;
 

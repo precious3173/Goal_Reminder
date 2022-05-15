@@ -15,19 +15,15 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+import androidx.room.TypeConverter;
 
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +33,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.mygoals.adapter.AddGoalAdapter;
+import com.example.mygoals.database.DearDiaryDatabase;
+import com.example.mygoals.model.DearDiaryArray;
+import com.example.mygoals.model.DiaryConverter;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -50,14 +56,15 @@ EditText editText;
 String diaryDate, diaryText;
 int colour, id;
 Bundle bundle;
+ViewGroup.LayoutParams params;
+byte [] diaryImage;
 private static final int CAMERA_CODE = 1000;
 private static final int LIBRARY_CODE = 1001;
-private String[] cameraPermissions;
-private String[] libraryPermissions;
-RelativeLayout relativeLayout;
+LinearLayout linearLayout;
 NavController navController;
 Intent a;
 Uri uri;
+Bitmap imageStore;
     ActivityResultLauncher<String> activityResultLauncher;
     ActivityResultLauncher<Intent>activityResult;
     ActivityResultLauncher<String> activtLauncher;
@@ -101,9 +108,8 @@ List<Integer>backgroundColour = new ArrayList<>();
         addDiary = view.findViewById(R.id.addDiary);
         editText = view.findViewById(R.id.text);
         background = view.findViewById(R.id.background);
-        relativeLayout = view.findViewById(R.id.linear);
+        linearLayout = view.findViewById(R.id.linear);
         addImage = view.findViewById(R.id.addImage);
-
         photo = view.findViewById(R.id.Image);
 
 
@@ -123,12 +129,27 @@ List<Integer>backgroundColour = new ArrayList<>();
                 if (result.getResultCode() == Activity.RESULT_OK ){
 
                     a = result.getData();
-                    assert a != null;
                     uri = a.getData();
-                    photo.setImageURI(uri);
+                   if (uri !=null) {
+
+                       try {
+                           imageStore = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
+                           photo.setImageBitmap(imageStore);
+
+                       } catch (IOException e) {
+                           e.printStackTrace();
+                       }
+
+                   }
+
+
                 }
             }
         });
+
+
+
+
          //add background colour
 
         background.setOnClickListener(new View.OnClickListener() {
@@ -140,7 +161,7 @@ List<Integer>backgroundColour = new ArrayList<>();
 
               colour =  Color.argb(255, random.nextInt(265),random.nextInt(265),random.nextInt(265));
 
-              relativeLayout.setBackgroundColor(colour);
+              linearLayout.setBackgroundColor(colour);
 
                 }
         });
@@ -158,7 +179,7 @@ List<Integer>backgroundColour = new ArrayList<>();
 
                 if (!editText.equals("")) {
                     dearDiaryDatabase.dearDiaryDAO().insertDearDiary
-                            (new DearDiaryArray(editText.getText().toString(), diaryDate));
+                            (new DearDiaryArray(editText.getText().toString(), diaryDate, DiaryConverter.ImageToByteArray(imageStore)));
 
                     Bundle bundle = new Bundle();
                     bundle.putInt("colour", colour);

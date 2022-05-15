@@ -1,11 +1,10 @@
-package com.example.mygoals;
+package com.example.mygoals.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
+import android.net.Uri;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,16 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
-import java.util.ArrayList;
+import com.example.mygoals.model.DearDiaryArray;
+import com.example.mygoals.EditDiaryFragment;
+import com.example.mygoals.R;
+import com.example.mygoals.database.DearDiaryDatabase;
+
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -42,6 +42,7 @@ public class DearDiaryAdapter extends RecyclerView.Adapter<DearDiaryAdapter.Dear
         this.context = context;
         this.onItemClick = onItemClick;
        this.onItemDelete = onItemDelete;
+
         dearDiaryDatabase = Room.databaseBuilder(context,
                 DearDiaryDatabase.class,"DearDiary").allowMainThreadQueries().build();
 
@@ -70,6 +71,7 @@ public class DearDiaryAdapter extends RecyclerView.Adapter<DearDiaryAdapter.Dear
      diaryText = diaryArray.getDiaryText();
      String diaryDate = diaryArray.getDiaryDate();
       id = diaryArray.getId();
+      byte [] image = diaryArray.getImage();
 
 
      Calendar cal = Calendar.getInstance(Locale.ENGLISH);
@@ -78,12 +80,11 @@ public class DearDiaryAdapter extends RecyclerView.Adapter<DearDiaryAdapter.Dear
                String dateTime = DateFormat.format("dd-MM-yyyy (HH:mm aa)", cal).toString();
                holder.diaryDate.setText(dateTime);
 
-
-
         holder.diaryTextt.setText(diaryText);
 
 
-     holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View view) {
 

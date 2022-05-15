@@ -1,11 +1,11 @@
 package com.example.mygoals;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentContainerView;
-import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.widget.Button;
+
+import com.example.mygoals.adapter.FragmentPageAdapter;
 
 public class MainActivity extends AppCompatActivity {
 

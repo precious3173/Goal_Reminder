@@ -52,13 +52,20 @@
 
 
     <EditText
-        android:id="@+id/editDiary"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:ems="10"
+        android:background="@android:color/transparent"
         android:gravity="start|top"
         android:inputType="textMultiLine"
         android:textColor="#121111"
         android:textSize="18sp"
+        android:id="@+id/editDiary"/>
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/Image"
         />
 </LinearLayout>

@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.NavHost;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -17,6 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.mygoals.adapter.DearDiaryAdapter;
+import com.example.mygoals.database.DearDiaryDatabase;
+import com.example.mygoals.model.DearDiaryArray;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -91,6 +92,7 @@ public  class DearDiaryFragment extends Fragment implements DearDiaryAdapter.onI
         EditDiaryFragment editDiaryFragment = new EditDiaryFragment();
         Bundle bundle = new Bundle();
         bundle.putString("diaryText", dearDiaryArray.getDiaryText());
+        bundle.putByteArray("image", dearDiaryArray.getImage());
         bundle.putInt("id", dearDiaryArray.getId());
         bundle.putInt("colour", colour);
         editDiaryFragment.setArguments(bundle);
